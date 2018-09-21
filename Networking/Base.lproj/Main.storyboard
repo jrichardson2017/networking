@@ -1,61 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Y2I-KF-wH3">
-    <device id="retina4_7" orientation="portrait">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="DjF-KT-53H">
+    <device id="retina4_0" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
         <!--Search View Controller-->
-        <scene sceneID="3OY-ch-EA6">
+        <scene sceneID="6ub-Ac-NBZ">
             <objects>
-                <tableViewController id="Y2I-KF-wH3" customClass="SearchViewController" customModule="Networking" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="okk-gw-Vdj">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                <viewController id="DjF-KT-53H" customClass="SearchViewController" customModule="Networking" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Kfk-nW-xa2">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="2aG-Y9-jIF">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </tableView>
+                            <searchBar contentMode="redraw" placeholder="App name, artist, song, album, e-book" translatesAutoresizingMaskIntoConstraints="NO" id="IfE-Jq-8Z0">
+                                <rect key="frame" x="0.0" y="20" width="320" height="56"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </searchBar>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="ResultsCell" id="qtI-l2-QyS">
-                                <rect key="frame" x="0.0" y="28" width="375" height="44"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="qtI-l2-QyS" id="bYn-bp-4FN">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                </tableViewCellContentView>
-                            </tableViewCell>
-                        </prototypes>
-                        <connections>
-                            <outlet property="dataSource" destination="Y2I-KF-wH3" id="vbV-du-LGg"/>
-                            <outlet property="delegate" destination="Y2I-KF-wH3" id="OCQ-r2-pfx"/>
-                        </connections>
-                    </tableView>
-                    <navigationItem key="navigationItem" id="ZET-J5-Gcz">
-                        <barButtonItem key="rightBarButtonItem" title="Download" id="Rnr-bb-yEs"/>
-                    </navigationItem>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="gvF-iM-2C3" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="940" y="19.340329835082461"/>
-        </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="eKu-VI-JYR">
-            <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="b7t-a5-NfJ" sceneMemberID="viewController">
-                    <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="Hnl-Uv-tCY">
-                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
+                        <constraints>
+                            <constraint firstItem="2aG-Y9-jIF" firstAttribute="top" secondItem="Kfk-nW-xa2" secondAttribute="top" id="6da-g9-zKZ"/>
+                            <constraint firstItem="IfE-Jq-8Z0" firstAttribute="top" secondItem="Wx6-GW-rUe" secondAttribute="top" id="NTr-G7-cvk"/>
+                            <constraint firstItem="IfE-Jq-8Z0" firstAttribute="leading" secondItem="Wx6-GW-rUe" secondAttribute="leading" id="WUZ-JO-6za"/>
+                            <constraint firstItem="2aG-Y9-jIF" firstAttribute="bottom" secondItem="Wx6-GW-rUe" secondAttribute="bottom" id="b3c-xw-lT6"/>
+                            <constraint firstItem="IfE-Jq-8Z0" firstAttribute="trailing" secondItem="Wx6-GW-rUe" secondAttribute="trailing" id="c4I-S8-JcX"/>
+                            <constraint firstItem="2aG-Y9-jIF" firstAttribute="trailing" secondItem="Wx6-GW-rUe" secondAttribute="trailing" id="g5i-o5-wH1"/>
+                            <constraint firstItem="2aG-Y9-jIF" firstAttribute="leading" secondItem="Wx6-GW-rUe" secondAttribute="leading" id="oLK-fy-IQM"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="Wx6-GW-rUe"/>
+                    </view>
                     <connections>
-                        <segue destination="Y2I-KF-wH3" kind="relationship" relationship="rootViewController" id="PkZ-V4-VOb"/>
+                        <outlet property="searchBar" destination="IfE-Jq-8Z0" id="hGv-uh-qEf"/>
+                        <outlet property="tableView" destination="2aG-Y9-jIF" id="urH-bf-KbC"/>
                     </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="nVu-Td-5Pf" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="GA4-Lw-ihM" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="0.80000000000000004" y="19.340329835082461"/>
+            <point key="canvasLocation" x="9" y="-104"/>
         </scene>
     </scenes>
 </document>
