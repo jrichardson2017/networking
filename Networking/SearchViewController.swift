@@ -25,7 +25,10 @@ class SearchViewController: UIViewController {
     
     // MARK: Variables
     
-    var searchResults = [String]()
+    var searchResults = Course()
+    let dispatchGroup = DispatchGroup()
+    let mainDispatchQueue = DispatchQueue.main
+    let userInitiatedQueue = DispatchQueue.global(qos: .userInitiated)
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,35 +44,50 @@ class SearchViewController: UIViewController {
     
     // MARK: Networking
     func makeNetworkRequest() {
-        // 1. Set the Parameters
-        
-        // 2. Build the URL
+        // Build the URL
         let urlString = "https://api.letsbuildthatapp.com/jsondecodable/course"
         guard let url = URL(string: urlString) else {return}
-        // 3. Configure the Request
+        // Configure the Request
         let request = URLRequest(url: url)
-        // 4. Make the Request
+        // Make the Request
         let session = URLSession.shared
-        let task = session.dataTask(with: request) { (data, response, error) in
-            
-            guard let data = data else {return}
-//            guard let dataString = String(data: data, encoding: .utf8) else {return}
-//            print("Request Data: \(dataString)")
-            
-            guard let statusCode = (response as? HTTPURLResponse)?.statusCode else {return}
-            print("Request Response: \(statusCode)")
-            
-            // 5. Parse the Data!
-            do {
-                let decoder = JSONDecoder()
-                let course = try decoder.decode(Course.self, from: data)
-            } catch let jsonError{
-                print("Error decoding JSON: \(jsonError)")
+        
+        // MARK: Enter the Dispatch Group
+//        dispatchGroup.enter()
+        
+         userInitiatedQueue.async {
+            let task = session.dataTask(with: request) { (data, response, error) in
+                
+                print("Getting Data...")
+                
+                guard let data = data else {return}
+                //            guard let dataString = String(data: data, encoding: .utf8) else {return}
+                //            print("Request Data: \(dataString)")
+                
+                guard let statusCode = (response as? HTTPURLResponse)?.statusCode else {return}
+                print("Request Response: \(statusCode)")
+                
+                // Parse the Data!
+                do {
+                    let decoder = JSONDecoder()
+                    self.searchResults = try decoder.decode(Course.self, from: data)
+                    print("Got Data!")
+                } catch let jsonError{
+                    print("Error decoding JSON: \(jsonError)")
+                }
+        
+                // MARK: Leave Dispatch Group
+//                self.dispatchGroup.leave()
+                
+                self.mainDispatchQueue.async(execute: {
+                    print("Reloading Data")
+                    self.tableView.reloadData()
+                })
             }
-            // 6. Use the Data!!
+            // Start the Request
+            task.resume()
         }
-        // 7. Start the Request
-        task.resume()
+        
     }
     
 }
@@ -82,15 +100,12 @@ extension SearchViewController: UISearchBarDelegate {
         makeNetworkRequest()
         // Dismiss the keyboard once the search button is selected
         searchBar.resignFirstResponder()
-        // Create an empty array to hold the search results
-        searchResults = []
         
-        // loop through the results and add each result to the searchResults array
-        for i in 0...2 {
-            searchResults.append(String(format: "Fake Results '%d' for '%@'", i , searchBar.text!))
-        }
-        // reload the table so it displays the search results
-        tableView.reloadData()
+        // MARK: Notify Dispatch Group
+//        dispatchGroup.notify(queue: .main) {
+//            print("Reloading Data")
+//            self.tableView.reloadData()
+//        }
     }
 }
 
@@ -98,7 +113,8 @@ extension SearchViewController: UISearchBarDelegate {
 extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     // MARK: Number of Rows in Section
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return searchResults.count
+//        return searchResults.count
+        return 1
     }
     
     // MARK: The reuseable cell in each row
@@ -112,7 +128,9 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
             cell = UITableViewCell(style: .default, reuseIdentifier: cellIdentifier)
         }
         // Assign the search results string to the cells text label
-        cell.textLabel?.text = searchResults[indexPath.row]
+        if let name = searchResults.name {
+            cell.textLabel?.text = name
+        }
         
         return cell
     }
