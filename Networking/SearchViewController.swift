@@ -8,6 +8,14 @@
 
 import UIKit
 
+struct Course: Decodable {
+    var id: Int?
+    var name: String?
+    var link: String?
+    var imageURL: String?
+    var number_of_lessons: Int?
+}
+
 class SearchViewController: UIViewController {
     
     // MARK: Outlets
@@ -32,8 +40,37 @@ class SearchViewController: UIViewController {
     }
     
     // MARK: Networking
-
-    
+    func makeNetworkRequest() {
+        // 1. Set the Parameters
+        
+        // 2. Build the URL
+        let urlString = "https://api.letsbuildthatapp.com/jsondecodable/course"
+        guard let url = URL(string: urlString) else {return}
+        // 3. Configure the Request
+        let request = URLRequest(url: url)
+        // 4. Make the Request
+        let session = URLSession.shared
+        let task = session.dataTask(with: request) { (data, response, error) in
+            
+            guard let data = data else {return}
+//            guard let dataString = String(data: data, encoding: .utf8) else {return}
+//            print("Request Data: \(dataString)")
+            
+            guard let statusCode = (response as? HTTPURLResponse)?.statusCode else {return}
+            print("Request Response: \(statusCode)")
+            
+            // 5. Parse the Data!
+            do {
+                let decoder = JSONDecoder()
+                let course = try decoder.decode(Course.self, from: data)
+            } catch let jsonError{
+                print("Error decoding JSON: \(jsonError)")
+            }
+            // 6. Use the Data!!
+        }
+        // 7. Start the Request
+        task.resume()
+    }
     
 }
 
@@ -41,10 +78,13 @@ class SearchViewController: UIViewController {
 extension SearchViewController: UISearchBarDelegate {
     // MARK: Begin Search
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        // make network request
+        makeNetworkRequest()
         // Dismiss the keyboard once the search button is selected
         searchBar.resignFirstResponder()
-        // Craete an empty array to hold the search results
+        // Create an empty array to hold the search results
         searchResults = []
+        
         // loop through the results and add each result to the searchResults array
         for i in 0...2 {
             searchResults.append(String(format: "Fake Results '%d' for '%@'", i , searchBar.text!))
