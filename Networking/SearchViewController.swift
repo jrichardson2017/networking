@@ -46,7 +46,7 @@ class SearchViewController: UIViewController {
     func makeNetworkRequest() {
         // Build the URL
         let urlString = "https://api.letsbuildthatapp.com/jsondecodable/course"
-        guard let url = URL(string: urlString) else {return}
+        guard let url = URL(string: urlString) else { return }
         // Configure the Request
         let request = URLRequest(url: url)
         // Make the Request
@@ -56,15 +56,16 @@ class SearchViewController: UIViewController {
 //        dispatchGroup.enter()
         
          userInitiatedQueue.async {
-            let task = session.dataTask(with: request) { (data, response, error) in
+            let task = session.dataTask(with: request) { [weak self] (data, response, error) in
+                guard let self = `self` else { return }
                 
                 print("Getting Data...")
                 
-                guard let data = data else {return}
+                guard let data = data else { return }
                 //            guard let dataString = String(data: data, encoding: .utf8) else {return}
                 //            print("Request Data: \(dataString)")
                 
-                guard let statusCode = (response as? HTTPURLResponse)?.statusCode else {return}
+                guard let statusCode = (response as? HTTPURLResponse)?.statusCode else { return }
                 print("Request Response: \(statusCode)")
                 
                 // Parse the Data!
