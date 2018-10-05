@@ -36,6 +36,7 @@ class SearchViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        customizeSearchBar()
         customizeTableViewAppearance()
         registerNibs()
     }
@@ -46,6 +47,10 @@ class SearchViewController: UIViewController {
         // adjust the content area of the table view so it's below the search bar
         tableView.contentInset = UIEdgeInsets(top: 64, left: 0, bottom: 0, right: 0)
         tableView.rowHeight = 80
+    }
+    
+    func customizeSearchBar() {
+        searchBar.becomeFirstResponder()
     }
     
     // MARK: Networking
