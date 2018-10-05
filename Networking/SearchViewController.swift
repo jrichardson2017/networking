@@ -16,6 +16,11 @@ struct SearchResults: Decodable {
     var number_of_lessons: Int?
 }
 
+struct TableViewCellIdentifiers {
+    static var searchResultCell = "SearchResultCell"
+    static var nothingFoundCell = "NothingFoundCell"
+}
+
 class SearchViewController: UIViewController {
     
     // MARK: Outlets
@@ -25,25 +30,28 @@ class SearchViewController: UIViewController {
     
     // MARK: Variables
     
-    var searchResult = SearchResults()
+    var searchResult = [SearchResults]()
     let dispatchGroup = DispatchGroup()
+    var hasSearched = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        placeTableViewBelowSearchBar()
+        customizeTableViewAppearance()
+        registerNibs()
     }
     
     // MARK: Table View Customizations
     
-    func placeTableViewBelowSearchBar() {
+    func customizeTableViewAppearance() {
         // adjust the content area of the table view so it's below the search bar
         tableView.contentInset = UIEdgeInsets(top: 64, left: 0, bottom: 0, right: 0)
+        tableView.rowHeight = 80
     }
     
     // MARK: Networking
     func makeNetworkRequest() {
         // Build the URL
-        let urlString = "https://api.letsbuildthatapp.com/jsondecodable/course"
+        let urlString = "https://api.letsbuildthatapp.com/jsondecodable/courses"
         guard let url = URL(string: urlString) else { return }
         // Configure the Request
         let request = URLRequest(url: url)
@@ -52,7 +60,6 @@ class SearchViewController: UIViewController {
         
          DispatchQueue.global(qos: .userInitiated).async {
             let task = session.dataTask(with: request) { [weak self] (data, response, error) in
-                guard let self = `self` else { return }
                 
                 print("Getting Data...")
                 
@@ -64,7 +71,7 @@ class SearchViewController: UIViewController {
                 // Parse the Data!
                 do {
                     let decoder = JSONDecoder()
-                    self.searchResult = try decoder.decode(SearchResults.self, from: data)
+                    self?.searchResult = try decoder.decode([SearchResults].self, from: data)
                     print("Got Data!")
                 } catch let jsonError{
                     print("Error decoding JSON: \(jsonError)")
@@ -72,7 +79,7 @@ class SearchViewController: UIViewController {
                 
                 DispatchQueue.main.async(execute: {
                     print("Reloading Data")
-                    self.tableView.reloadData()
+                    self?.tableView.reloadData()
                 })
             }
             // Start the Request
@@ -96,28 +103,37 @@ extension SearchViewController: UISearchBarDelegate {
 
 
 extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
+    // MARK: Register Nibs
+    func registerNibs() {
+        var cellNib = UINib(nibName: TableViewCellIdentifiers.searchResultCell, bundle: nil)
+        tableView.register(cellNib, forCellReuseIdentifier: TableViewCellIdentifiers.searchResultCell)
+        
+        cellNib = UINib(nibName: TableViewCellIdentifiers.nothingFoundCell, bundle: nil)
+        tableView.register(cellNib, forCellReuseIdentifier: TableViewCellIdentifiers.nothingFoundCell)
+    }
+    
     // MARK: Number of Rows in Section
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        return searchResults.count
-        return 1
+        if searchResult.count == 0 {
+            return 1
+        } else {
+            return searchResult.count
+        }
     }
     
     // MARK: The reuseable cell in each row
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        // Create the cells reuseable identifier
-        let cellIdentifier = "SearchResultCell"
-        // Create the cell and assign the identifier to it
-        var cell: UITableViewCell! = tableView.dequeueReusableCell(withIdentifier: cellIdentifier)
-        // Make a backup default cell incase the reuseable cell can't be created
-        if cell == nil {
-            cell = UITableViewCell(style: .default, reuseIdentifier: cellIdentifier)
+        if searchResult.count == 0 {
+            return tableView.dequeueReusableCell(withIdentifier: TableViewCellIdentifiers.nothingFoundCell, for: indexPath) as! NothingFoundCell
+        } else {
+            let cell = tableView.dequeueReusableCell(withIdentifier: TableViewCellIdentifiers.searchResultCell, for: indexPath) as! SearchResultCell
+
+            let result = searchResult[indexPath.row]
+            if let name = result.name {
+                cell.nameLabel?.text = name
+            }
+            return cell
         }
-        // Assign the search results string to the cells text label
-        if let name = searchResult.name {
-            cell.textLabel?.text = name
-        }
-        
-        return cell
     }
     
     
