@@ -8,7 +8,7 @@
 
 import UIKit
 
-struct Course: Decodable {
+struct SearchResults: Decodable {
     var id: Int?
     var name: String?
     var link: String?
@@ -25,10 +25,8 @@ class SearchViewController: UIViewController {
     
     // MARK: Variables
     
-    var searchResults = Course()
+    var searchResult = SearchResults()
     let dispatchGroup = DispatchGroup()
-    let mainDispatchQueue = DispatchQueue.main
-    let userInitiatedQueue = DispatchQueue.global(qos: .userInitiated)
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -52,18 +50,13 @@ class SearchViewController: UIViewController {
         // Make the Request
         let session = URLSession.shared
         
-        // MARK: Enter the Dispatch Group
-//        dispatchGroup.enter()
-        
-         userInitiatedQueue.async {
+         DispatchQueue.global(qos: .userInitiated).async {
             let task = session.dataTask(with: request) { [weak self] (data, response, error) in
                 guard let self = `self` else { return }
                 
                 print("Getting Data...")
                 
                 guard let data = data else { return }
-                //            guard let dataString = String(data: data, encoding: .utf8) else {return}
-                //            print("Request Data: \(dataString)")
                 
                 guard let statusCode = (response as? HTTPURLResponse)?.statusCode else { return }
                 print("Request Response: \(statusCode)")
@@ -71,16 +64,13 @@ class SearchViewController: UIViewController {
                 // Parse the Data!
                 do {
                     let decoder = JSONDecoder()
-                    self.searchResults = try decoder.decode(Course.self, from: data)
+                    self.searchResult = try decoder.decode(SearchResults.self, from: data)
                     print("Got Data!")
                 } catch let jsonError{
                     print("Error decoding JSON: \(jsonError)")
                 }
-        
-                // MARK: Leave Dispatch Group
-//                self.dispatchGroup.leave()
                 
-                self.mainDispatchQueue.async(execute: {
+                DispatchQueue.main.async(execute: {
                     print("Reloading Data")
                     self.tableView.reloadData()
                 })
@@ -101,12 +91,6 @@ extension SearchViewController: UISearchBarDelegate {
         makeNetworkRequest()
         // Dismiss the keyboard once the search button is selected
         searchBar.resignFirstResponder()
-        
-        // MARK: Notify Dispatch Group
-//        dispatchGroup.notify(queue: .main) {
-//            print("Reloading Data")
-//            self.tableView.reloadData()
-//        }
     }
 }
 
@@ -129,7 +113,7 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
             cell = UITableViewCell(style: .default, reuseIdentifier: cellIdentifier)
         }
         // Assign the search results string to the cells text label
-        if let name = searchResults.name {
+        if let name = searchResult.name {
             cell.textLabel?.text = name
         }
         

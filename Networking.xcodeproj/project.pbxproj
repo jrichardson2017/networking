@@ -12,6 +12,7 @@
 		C126776321540C5B00F16BDE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C126776121540C5B00F16BDE /* Main.storyboard */; };
 		C126776521540C5C00F16BDE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C126776421540C5C00F16BDE /* Assets.xcassets */; };
 		C126776821540C5C00F16BDE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C126776621540C5C00F16BDE /* LaunchScreen.storyboard */; };
+		C164BE522166B6D500BAF92C /* SearchResultCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C164BE512166B6D500BAF92C /* SearchResultCell.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +23,7 @@
 		C126776421540C5C00F16BDE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C126776721540C5C00F16BDE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		C126776921540C5C00F16BDE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C164BE512166B6D500BAF92C /* SearchResultCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SearchResultCell.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +58,7 @@
 			children = (
 				C126775D21540C5B00F16BDE /* AppDelegate.swift */,
 				C126775F21540C5B00F16BDE /* SearchViewController.swift */,
+				C164BE512166B6D500BAF92C /* SearchResultCell.xib */,
 				C126776121540C5B00F16BDE /* Main.storyboard */,
 				C126776421540C5C00F16BDE /* Assets.xcassets */,
 				C126776621540C5C00F16BDE /* LaunchScreen.storyboard */,
@@ -124,6 +127,7 @@
 			files = (
 				C126776821540C5C00F16BDE /* LaunchScreen.storyboard in Resources */,
 				C126776521540C5C00F16BDE /* Assets.xcassets in Resources */,
+				C164BE522166B6D500BAF92C /* SearchResultCell.xib in Resources */,
 				C126776321540C5B00F16BDE /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
