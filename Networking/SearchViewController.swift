@@ -114,11 +114,7 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     
     // MARK: Number of Rows in Section
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if searchResult.count == 0 {
-            return 1
-        } else {
-            return searchResult.count
-        }
+        return searchResult.count
     }
     
     // MARK: The reuseable cell in each row
@@ -135,6 +131,5 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
             return cell
         }
     }
-    
-    
+        
 }
